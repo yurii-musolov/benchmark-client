@@ -8,8 +8,13 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "engines": {
+    "node": "^20.5.1"
+  },
   "dependencies": {
-    "vue": "^3.3.4"
+    "qs": "^6.11.2",
+    "vue": "^3.3.4",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

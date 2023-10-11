@@ -1,7 +1,21 @@
-# Vue 3 + Vite
+# UI Benchmark (Vite + Vue3)
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## run local
 
-## Recommended IDE Setup
+```bash
+vite build && npx http-server dist
+node scripts/cannon
+```
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## params
+
+param: 'http_host', type: 'str', default: '127.0.0.1'
+param: 'http_port', type: 'num', default: 3001
+param: 'ws_host', type: 'str', default: '127.0.0.1'
+param: 'ws_port', type: 'num', default: 3002
+param: 'order_book_size', type: 'num', default: 1000
+param: 'order_book_message_per_sec', type: 'num', default: 1
+
+```bash
+node scripts/cannon --order_book_message_per_sec=20 --order_book_size=1200
+```

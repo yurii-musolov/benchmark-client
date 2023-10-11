@@ -1,32 +1,42 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import AppHeader from './components/AppHeader.vue'
+import OrderBook from './components/order-book/OrderBook.vue'
+import Metrics from './components/Metrics.vue'
+import { metrics } from './application'
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app-layout">
+    <AppHeader class="app-layout__header" title="UI Benchmark (Vite + Vue3)" />
+    <Metrics class="app-layout__metrics" :metrics="metrics" />
+    <OrderBook class="app-layout__order-book" />
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.app-layout {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header header"
+    "metrics metrics order-book"
+    "metrics metrics order-book";
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.app-layout__header {
+  grid-area: header;
 }
 
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.app-layout__order-book {
+  grid-area: order-book;
+  border-left: solid 1px #888;
+  width: 400px;
+}
+
+.app-layout__metrics {
+  grid-area: metrics;
 }
 </style>
