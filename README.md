@@ -3,6 +3,8 @@
 ## run local
 
 ```bash
+nvm use 20
+npm i
 vite build && npx http-server dist
 node scripts/cannon
 ```
@@ -19,3 +21,7 @@ param: 'order_book_message_per_sec', type: 'num', default: 1
 ```bash
 node scripts/cannon --order_book_message_per_sec=20 --order_book_size=1200
 ```
+
+## report
+
+scrines: ./report/*.png
