@@ -12,11 +12,10 @@ const roundVolume = (volume, precision = 2) => (volume + Number.EPSILON).toFixed
 export class OrderBook {
   _state = reactive({
     scale: 0.0001,
-    orders: new Map(),
-    scaledOrders: new Map(),
     bids: [],
     asks: [],
   })
+  _orders = new Map()
 
   constructor(orderBookService, config) {
     this._config = config
@@ -40,10 +39,13 @@ export class OrderBook {
     return this._state.asks
   }
 
+  get scale() {
+    return this._state.scale
+  }
+
   setScale(scale) {
     console.log("~ scale", scale)
     this._state.scale = scale
-    this._aggregate()
   }
 
   _handler({ action, data }) {
@@ -53,8 +55,7 @@ export class OrderBook {
 
   _reset() {
     console.log("~ reset")
-    this._state.orders.clear()
-    this._state.scaledOrders.clear()
+    this._orders.clear()
     this._state.bids = []
     this._state.asks = []
   }
@@ -67,12 +68,12 @@ export class OrderBook {
 
   _insert(data) {
     console.log("~ insert", data.length)
-    data.forEach(order => this._state.orders.set(order.price, order))
+    data.forEach(order => this._orders.set(order.price, order))
   }
 
   _update(data) {
     data.forEach(order => {
-      const _order = this._state.orders.get(order.price)
+      const _order = this._orders.get(order.price)
       if (_order) {
         _order.volume = order.volume
         _order.side = order.side
@@ -85,26 +86,23 @@ export class OrderBook {
 
   _delete(data) {
     console.log("~ delete", data.length)
-    data.forEach(order => this._state.orders.delete(order.price))
+    data.forEach(order => this._orders.delete(order.price))
   }
 
   _aggregate() {
-    if (this._running) return
-    this._running = true
-
-    const limit = this._config.renderLimit
+    const scaledOrders = new Map()
+    const limit = this._config.renderLimitLineCount
     const bids = []
     const asks = []
-    this._state.scaledOrders.clear()
-    this._state.orders.forEach(order => {
+    this._orders.forEach(order => {
       const formatedPrice = roundPrice(order.price, this._state.scale, 4, order.side)
-      const scaledOrder = this._state.scaledOrders.get(formatedPrice)
+      const scaledOrder = scaledOrders.get(formatedPrice)
       if (scaledOrder) {
         scaledOrder.volume + order.volume
       } else {
         const scaledOrder = { ...order, formatedPrice }
         scaledOrder.side === 0 ? asks.push(scaledOrder) : bids.push(scaledOrder)
-        this._state.scaledOrders.set(formatedPrice, scaledOrder)
+        scaledOrders.set(formatedPrice, scaledOrder)
       }
     })
 
@@ -128,7 +126,5 @@ export class OrderBook {
 
     this._state.bids = bids.slice(0, limit)
     this._state.asks = asks.slice(0, limit)
-
-    this._running = false
   }
 }

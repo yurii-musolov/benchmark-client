@@ -13,7 +13,7 @@ const httpClient = new HTTPClient({
 
 const orderBookService = new OrderBookService(httpClient, wsClient, {})
 export const orderBook = new OrderBook(orderBookService, {
-  renderLimit: 100,
+  renderLimitLineCount: 100,
   renderDelay: 1000,
 })
 

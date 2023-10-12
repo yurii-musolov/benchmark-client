@@ -43,4 +43,5 @@ defineProps({
 
 .order-book-side._reverse {
   flex-direction: column-reverse;
-}</style>
+}
+</style>
